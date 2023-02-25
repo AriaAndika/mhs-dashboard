@@ -47,7 +47,7 @@
 	let tampilTanggal = "© " + hari + ", " + tanggal + " " + bulan + " " + tahun + " | ABSENSI UDINUS | All Right Reserved";
 	hari = hariMap[hari]
 	bulan = bulanMap[bulan]
-
+	
 </script>
 
 <svelte:head>
@@ -150,6 +150,7 @@
 				</div>
 			</div>
 		</div>
+		
 	</div>
 </div>
 

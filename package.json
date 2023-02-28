@@ -3,6 +3,7 @@
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
+		"start": "vite build && vite preview",
 		"dev": "vite dev",
 		"host": "vite dev --host",
 		"build": "vite build",
@@ -24,7 +25,6 @@
 	"type": "module",
 	"dependencies": {
 		"canvas": "^2.11.0",
-		"face-api.js": "^0.22.2",
-		"pocketbase": "^0.11.1"
+		"face-api.js": "^0.22.2"
 	}
 }

@@ -1,5 +1,5 @@
 <main>
-	<h1>Absensi Mahasiswa</h1>
+	<h1>PRESENSI Mahasiswa</h1>
 
 
 	<div class="recent">

@@ -1,5 +1,5 @@
 export {
-	
+	redirect,
 	range,
 }
 
@@ -18,4 +18,10 @@ function range(from:number, to: number) {
 			}
 		}
 	}
+}
+
+function redirect(href: string) {
+	const l = document.createElement('a')
+	l.href = href
+	l.click()
 }

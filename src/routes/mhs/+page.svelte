@@ -1,5 +1,10 @@
 <script lang=ts>
   import { onMount } from "svelte";
+	// import Cam from "./cam.svelte";
+	
+	let showDevice: (isShowed: boolean) => Promise<void> = () => new Promise(()=>{})
+	let loaded = false
+	
 	
 	const startingMinutes = 30;
 	let time = startingMinutes * 60;
@@ -24,13 +29,19 @@
 	let tampilWaktu = "" + hari + ", " + tanggal + " " + bulan + " " + tahun + "";
 </script>
 
+<!-- <Cam bind:loaded bind:showDevice/> -->
+
 <!-- AKHIRAN ASIDE -->
 <main>
-		<h1>Absensi Mahasiswa</h1>
+		<h1>Presensi Mahasiswa</h1>
 		<div class="date"><input type="date"></div>
-		<h1 class="pt">Absensi Yang akan ditutup</h1>
+		<h1 class="pt">Presensi Yang akan ditutup</h1>
 		<h1 id="dates">{tampilWaktu}</h1>
+		
+		
 		<div class="insights">
+			
+			
 				<div class="dosen">
 						<span class="material-symbols-outlined">menu_book</span>
 						<div class="middle">
@@ -40,7 +51,7 @@
 								</div>
 								<div class="progress">
 										<h1 id="countdown" class="countdown">{counter}</h1>
-										<button class="btn-absen">Absen</button>
+										<button class="btn-absen" on:click={()=>showDevice(true)}>Absen</button>
 								</div>
 						</div>
 						<small class="text-muted">RUANG H.4.7</small>

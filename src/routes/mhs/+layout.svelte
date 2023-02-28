@@ -1,9 +1,28 @@
 <script lang=ts>
+  // import { redirect } from "$lib/lib";
+  // import pocketbaseEs from "pocketbase";
+  // import type { LayoutData } from "./$types";
+  import { getDate } from "./lib";
+
+	// //------------------------AUTH-----------------------------
+	// const pb = new pocketbaseEs('http://127.0.0.1:8090')
+	// const isValid = pb.authStore.isValid
+	// if (!isValid){
+	// 	redirect('/')
+	// }
+	
+	// const user = pb.authStore.model
+	
+	// export let data: LayoutData
+	
+	
+	
+	//------------------------AUTH-----------------------------
 	let active = "/mhs";
 	let sidebars = [{
 			href: "/mhs",
 			mat: "grid_view",
-			msg: "Absensi",
+			msg: "Presensi",
 		},{
 			href: "/mhs/izin",
 			mat: "edit_square",
@@ -13,10 +32,6 @@
 			mat: "schedule",
 			msg: "Jadwal",
 		},{
-			href: "/mhs/tugas",
-			mat: "collections_bookmark",
-			msg: "Tugas",
-		},{
 			href: "/mhs/matkul",
 			mat: "school",
 			msg: "Mata Kuliah",
@@ -24,44 +39,32 @@
 			href: "/mhs/pesan",
 			mat: "mail",
 			msg: 'Pesan <span class="message-count">26</span>',
-		},{
-			href: "#a",
-			mat: "logout",
-			msg: "Log Out",
-		},
+		}
 	];
 	
-	//================================================================
 	let dark = localStorage.getItem('theme') == 'dark'
-	dark ? document.body.classList.toggle('dark-theme-variables') : ''
-	
 	let sideMenu: HTMLElement
 	
-	const date = new Date();
-	let tahun = date.getFullYear();
-	let bulan: number | string = date.getMonth();
-	let tanggal = date.getDate();
-	let hari: number | string = date.getDay();
-	let hariMap = ["Minggu","Senin","Selasa","Rabu","Kamis","Jum'at","Sabtu"]
-	let bulanMap = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"]
-	let tampilTanggal = "© " + hari + ", " + tanggal + " " + bulan + " " + tahun + " | ABSENSI UDINUS | All Right Reserved";
-	hari = hariMap[hari]
-	bulan = bulanMap[bulan]
+	let tampilTanggal = getDate()
+	
 	
 </script>
+
 
 <svelte:head>
 	<link	rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0">
 	<link rel="stylesheet" href="/mhs/style.css">
-	<!-- <script src="/mhs/index.js" defer></script> -->
 </svelte:head>
 
-<div class="container">
+<!-- {#if isValid} -->
+<!-- <div>Authenticating</div> -->
+{#if true}
+<div class="container" class:dark-theme-variables={dark}>
 	<aside bind:this={sideMenu}>
 		<div class="top">
 			<div class="logo">
 				<img src="/img/logo.png" alt="udinus logo">
-				<h2>ABSENSI <span class="primary">UDINUS</span></h2>
+				<h2>PRESENSI <span class="primary">UDINUS</span></h2>
 			</div>
 			<!-- svelte-ignore a11y-click-events-have-key-events -->
 			<div class="close" id="close-btn" on:click={()=>sideMenu.style.display = 'none'}>
@@ -75,6 +78,13 @@
 					<h3>{@html s.msg}</h3>
 				</a>
 			{/each}
+				<!-- <a href="#a" on:click={() =>{
+					pb.authStore.clear()
+					redirect('/')
+				}}>
+					<span class="material-symbols-outlined">logout</span>
+					<h3>Log Out</h3>
+				</a> -->
 		</div>
 	</aside>
 	
@@ -97,7 +107,7 @@
 			</div>
 			<div class="profile">
 				<div class="info">
-					<p>Halo, <b>Ricky Primayuda Putra</b></p>
+					<!-- <p>Halo, <b>{user.name}</b></p> -->
 					<small class="text-muted">Mahasiswa 2022/2023</small>
 				</div>
 				<div class="profile-photo">
@@ -105,8 +115,6 @@
 				</div>
 			</div>
 		</div>
-		<!-- AKHIRAN TOP -->
-		
 		
 		<div class="recent-updates">
 			<h2>Update Terbaru</h2>
@@ -124,36 +132,10 @@
 			</div>
 			{/each}
 		</div>
-		<!-- AKHIRAN UPDATE TERBARU -->
-		
-		
-		<div class="absensi-analytics">
-			<h2>TUGAS</h2>
-			{#each ['Pemrograman Berbasis Web','Matematika Diskrit','Kalkulus'] as e}				
-			<div class="item online">
-				<div class="right">
-					<span class="material-symbols-outlined icon">collections_bookmark</span>
-					<h3>{e}</h3>
-					<div class="info">
-						<h5 class="success">0 Tugas</h5>
-						<a href="#a"><small class="text-muted warning">Detail</small></a>
-					</div>
-				</div>
-			</div>
-			{/each}			
-			<div class="item see-all">
-				<div>
-					<span class="material-symbols-outlined">visibility</span>
-					<a href="/mhs/tugas">
-						<h3>Lihat Semua</h3>
-					</a>
-				</div>
-			</div>
-		</div>
 		
 	</div>
 </div>
-
 <footer>
 	<p id="date">{tampilTanggal}</p>
 </footer>
+{/if}

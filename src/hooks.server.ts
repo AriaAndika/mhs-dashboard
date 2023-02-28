@@ -1,17 +1,14 @@
-import type { Handle } from '@sveltejs/kit';
- 
-let counter = 0
+import "$lib/supabase";
+import { getSupabase } from "@supabase/auth-helpers-sveltekit";
+import type { Handle } from "@sveltejs/kit";
 
-export const handle = (async ({ event, resolve }) => {
-  if (event.url.pathname.startsWith('/custom')) {
-    return new Response('custom response');
-  }
-  
-	const response = await resolve(event);
+
+export const handle: Handle = async ({event, resolve}) => {
+	const { session, supabaseClient } = await getSupabase(event)
 	
+	event.locals.sb = supabaseClient
+	event.locals.session = session
 	
-	console.log(counter++,event.isDataRequest)
-	
-	
-  return response;
-}) satisfies Handle;
+	return resolve(event)
+}
+

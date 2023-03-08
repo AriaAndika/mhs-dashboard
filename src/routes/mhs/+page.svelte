@@ -3,6 +3,7 @@
 	import { getDate, getTime } from "$lib/lib";
   import { jadwal, state } from "$lib/state";
 	import { active } from "./+layout.svelte";
+  import Camera from "./Camera.svelte";
 	
 	
 
@@ -16,23 +17,23 @@
 	
 	
 	filteredJadwal.forEach((e,i)=>{
-		
-		const [hari] = e.jadwal1.split(',')
 
 		if (!e.status) { return }
 		
+		const openTimeHour = new Date(e.stamp).getHours()
 		const openTime = new Date(e.stamp).getMinutes()
 		const openTimeSec = new Date(e.stamp).getSeconds()
 		
-		
-		const currentTime = (new Date()).getMinutes()
-		const currentTimeSec = (new Date()).getSeconds()
+		const cr = new Date()
+		const currentHour = cr.getHours()
+		const currentTime = cr.getMinutes()
+		const currentTimeSec = cr.getSeconds()
 		const endTime = openTime + 3
 		
 		
 		const counter = endTime - currentTime
 		
-		data[i].time = (counter * 60) + (openTimeSec - currentTimeSec)
+		data[i].time = (counter * 60) + (openTimeSec - currentTimeSec) + ((openTimeHour * 3600) - (currentHour * 3600))
 	})
 	
 	// const startingMinutes = 0
@@ -62,8 +63,8 @@
 </script>
 
 {#if show}
-	<div></div>
-	<!-- <Camera/> -->
+	<!-- <div></div> -->
+	<Camera close={()=>show=false} />
 {/if}
 
 <main>

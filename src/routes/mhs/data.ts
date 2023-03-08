@@ -15,5 +15,9 @@ export let sidebars = [{
 		href: "/mhs/matkul",
 		mat: "school",
 		msg: "Mata Kuliah",
+	},{
+		href: "/mhs/test",
+		mat: "school",
+		msg: "Test",
 	}
 ];

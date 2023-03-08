@@ -1,10 +1,6 @@
 <main>
 	<h1>Dashboard Dosen</h1>
 
-	<div class="date">
-			<input type="date">
-	</div>
-
 	<h1 class="pt">Laporan Presensi</h1>
 
 	

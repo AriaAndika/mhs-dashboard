@@ -1,67 +1,15 @@
 
 <script lang=ts>
-	let sideMenu // = document.querySelector("aside");
-	let menuBtn // = document.querySelector("#menu-btn");
-	let closeBtn // = document.querySelector("#close-btn");
-	let themeToggler // = document.querySelector(".theme-toggler");
-
-	//munculkan sidebar
-	// menuBtn.addEventListener('click', () => {
-	// 		sideMenu.style.display = 'block';
-	// })
-
-	//menutup sidebar
-	// closeBtn.addEventListener('click', () => {
-	// 		sideMenu.style.display = 'none';
-	// })
-
-	//mengubah tema
-	// themeToggler.addEventListener('click', () => {
-	// 		document.body.classList.toggle('dark-theme-variables');
-
-	// 		themeToggler.querySelector('span:nth-child(1)').classList.toggle('active');
-	// 		themeToggler.querySelector('span:nth-child(2)').classList.toggle('active');
-	// })
-
-
-
-	let date = new Date();
-	let tahun = date.getFullYear();
-	let bulan: number | string = date.getMonth();
-	let tanggal = date.getDate();
-	let hari: number | string = date.getDay();
-	// let jam = date.getHours();
-	// let menit = date.getMinutes();
-	// let detik = date.getSeconds();
-	switch(hari) {
-		case 0: hari = "Minggu"; break;
-		case 1: hari = "Senin"; break;
-		case 2: hari = "Selasa"; break;
-		case 3: hari = "Rabu"; break;
-		case 4: hari = "Kamis"; break;
-		case 5: hari = "Jum'at"; break;
-		case 6: hari = "Sabtu"; break;
-	}
-	switch(bulan) {
-		case 0: bulan = "Januari"; break;
-		case 1: bulan = "Februari"; break;
-		case 2: bulan = "Maret"; break;
-		case 3: bulan = "April"; break;
-		case 4: bulan = "Mei"; break;
-		case 5: bulan = "Juni"; break;
-		case 6: bulan = "Juli"; break;
-		case 7: bulan = "Agustus"; break;
-		case 8: bulan = "September"; break;
-		case 9: bulan = "Oktober"; break;
-		case 10: bulan = "November"; break;
-		case 11: bulan = "Desember"; break;
-	}
-	var tampilTanggal = "© " + hari + ", " + tanggal + " " + bulan + " " + tahun + " | ABSENSI UDINUS | All Right Reserved";
-	// var tampilWaktu = "" + hari + ", " + tanggal + " " + bulan + " " + tahun + "";
-
-	// document.getElementById("date").innerHTML = tampilTanggal;
+  import { darkMode, footerGetDate } from "$lib/lib";
+	import { logout, state } from "$lib/state";
+  
+	let dark = darkMode(false,true)
+	let sideMenu: HTMLElement	
+	let active = location.pathname
 	
-	let active = '/dosen'
+	// User data
+	let nama = $state.user.nama
+
 	const sidebar = [{
 			href: '/dosen',
 			mat: 'grid_view',
@@ -90,17 +38,11 @@
 	]
 </script>
 
-<svelte:head>
-	<link	rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0">
-	<link rel="stylesheet" href="/dosen/css/style.css">
-	<link rel="stylesheet" href="/dosen/css/daftar.css">
-</svelte:head>
-
 <div class="container">
 	<aside bind:this={sideMenu}>
 			<div class="top">
 					<div class="logo">
-							<img src="/dosen/img/logo.png" alt="logo">
+							<img src="/img/logo.png" alt="logo">
 							<h2>PRESENSI <span class="primary">UDINUS</span></h2>
 					</div>
 					<!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -116,7 +58,7 @@
 						<h3>{@html text}</h3>
 				</a>
 				{/each}
-				<a href="#a">
+				<a href="#a" on:click={logout}>
 						<span class="material-symbols-outlined">logout</span>
 						<h3>Log Out</h3>
 				</a>
@@ -131,21 +73,17 @@
 							 <span class="material-symbols-outlined">menu</span>
 					</button>
 					<!-- svelte-ignore a11y-click-events-have-key-events -->
-					<div class="theme-toggler" bind:this={themeToggler} on:click={() => {
-						document.body.classList.toggle('dark-theme-variables');
-						themeToggler.querySelector('span:nth-child(1)').classList.toggle('active');
-						themeToggler.querySelector('span:nth-child(2)').classList.toggle('active');
-					}}>
-							<span class="material-symbols-outlined active">light_mode</span>
-							<span class="material-symbols-outlined">dark_mode</span>
+					<div class="theme-toggler" on:click={()=>{dark = darkMode(dark)}}>
+						<span class="material-symbols-outlined" class:active={!dark}>light_mode</span>
+						<span class="material-symbols-outlined" class:active={dark}>dark_mode</span>
 					</div>
 					<div class="profile">
 							<div class="info">
-									<p>Halo, <b>Suprayogi, M. Kom</b></p>
+									<p>Halo, <b>{nama}</b></p>
 									<small class="text-muted">DOSEN</small>
 							</div>
 							<div class="profile-photo">
-									<img src="/dosen/img/admin.png" alt="">
+									<img src="/img/admin.png" alt="">
 							</div>
 					</div>
 			</div>
@@ -224,5 +162,5 @@
 </div>
 
 <footer>
-	<p id="date">{tampilTanggal}</p>
+	<p id="date">{footerGetDate()}</p>
 </footer>

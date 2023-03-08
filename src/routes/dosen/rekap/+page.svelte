@@ -1,10 +1,6 @@
 <main>
 	<h1>Dashboard Dosen</h1>
 
-	<div class="date">
-			<input type="date">
-	</div>
-
 	<h1 class="pt">Laporan Presensi</h1>
 
 	
@@ -20,7 +16,7 @@
 					</select>
 			</div>
 			<br>
-			<button class="btn-download"><img style="width: 80px; display: flex; justify-content: center;" src="img/excel.png"></button>
+			<button class="btn-download"><img style="width: 80px; display: flex; justify-content: center;" alt="" src="/img/excel.png"></button>
 			<br><br>
 			<h1>Kelas A11-4113</h1>
 			<br>

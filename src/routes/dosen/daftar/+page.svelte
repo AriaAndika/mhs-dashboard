@@ -1,12 +1,13 @@
+
+<script lang=ts>
+	import { getTime } from "$lib/lib";
+</script>
+
 <main>
 	<h1>Dashboard Dosen</h1>
 
-	<div class="date">
-			<input type="date">
-	</div>
-
 	<h1 class="pt">Daftar Presensi</h1>
-	<h1 id="dates"></h1>
+	<h1 id="dates">{getTime()}</h1>
 
 	
 	<div class="recent">
@@ -136,7 +137,7 @@
 			</table>
 	</div>
 	<div class="recent">
-			<h2>CEK Presensi</h2>
+			<h2>Cek Presensi</h2>
 			<table>
 					<thead>
 							<tr>
@@ -151,19 +152,19 @@
 									<td>1.</td>
 									<td>Dasar Pemrograman</td>
 									<td>A11-4113</td>
-									<td><a href="laporan.html">Details</a></td>
+									<td><a href="/dosen/laporan">Details</a></td>
 							</tr>
 							<tr>
 									<td>2.</td>
 									<td>Dasar Pemrograman</td>
 									<td>A11-4112</td>
-									<td><a href="laporan.html">Details</a></td>
+									<td><a href="/dosen/laporan">Details</a></td>
 							</tr>
 							<tr>
 									<td>3.</td>
 									<td>Dasar Pemrograman</td>
 									<td>A11-4111</td>
-									<td><a href="laporan.html">Details</a></td>
+									<td><a href="/dosen/laporan">Details</a></td>
 							</tr>
 					</tbody>
 			</table>

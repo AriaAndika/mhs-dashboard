@@ -1,9 +1,60 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,700;0,800;1,600&display=swap');
+
 /* FONT */
-html,body{
+*{
   margin: 0;
   padding: 0;
+  outline: 0;
+  appearance: none;
+  list-style: none;
+  text-decoration: 0;
+  border: 0;
+}
+html,body{
   box-sizing: border-box;
   font-family: poppins, sans-serif;
-  font-size: 14px;
-  scroll-behavior: smooth;
+}
+
+canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 20;
+}
+
+input.za-form{
+  padding: .7rem 1.2rem;
+  border-radius: 6px;
+}
+select.za-form{
+  padding: .7rem 1.2rem;
+  border-radius: 6px;
+}
+input[type="submit"].za-form{
+  padding: .7rem 1.2rem;
+  border-radius: 6px;
+	background-color: var(--color-primary);
+	color: white;
+  cursor: pointer;
+}
+input[type="time"].za-form{
+  padding: .7rem 1.2rem;
+  border-radius: 6px;
+	background-color: var(--color-primary);
+	color: white;
+}
+input[type="submit"].za-form:disabled{
+	color: dimgray;
+}
+.form-down{
+	display: flex;
+	flex-direction: column;
+	z-index: 300;
+}
+.form-down > *{
+	margin: .4rem 0;
+}
+button:disabled{
+  color: gray;
 }

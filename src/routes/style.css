@@ -1,6 +1,7 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,700;0,800;1,600&display=swap');
 .top-container{
+	margin: 0;
+	padding: 0;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -101,6 +102,7 @@ form h2{
 	transition: 0.5s;
 }
 
+.inputBox input:disabled ~ span,
 .inputBox input:valid ~ span,
 .inputBox input:focus ~ span{
 	color: #7380ec;
@@ -119,7 +121,7 @@ form h2{
 	transition: 0.5s;
 	pointer-events: none;
 }
-
+.inputBox input:disabled ~ i,
 .inputBox input:valid ~ i,
 .inputBox input:focus ~ i{
 	height: 44px;

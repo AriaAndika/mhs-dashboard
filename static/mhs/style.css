@@ -197,7 +197,7 @@ aside .sidebar a span{
 aside .sidebar a:last-child{
   position: absolute;
   bottom: 2rem;
-  width: 100vw;
+  /* width: 100vw; WOT */
 }
 
 aside .sidebar a.active{
@@ -320,7 +320,7 @@ main .insights svg circle{
   stroke-dashoffset: 92;
 }
 
-main .insights .dosen svg circle{
+/* main .insights .dosen svg circle{
   stroke-dashoffset: -30%;
   stroke-dasharray: 200;
 }
@@ -333,7 +333,7 @@ main .insights .mahasiswa svg circle{
 main .insights .fakultas svg circle{
   stroke-dashoffset: 35;
   stroke-dasharray: 110;
-}
+} */
 
 main .insights .progress .number{
   position: absolute;
@@ -575,7 +575,7 @@ main .recent a{
   }
 
   main .recent table{
-      width: 83vw;
+      width: 38vw;
   }
 
   /* main table thead tr th:last-child,
@@ -590,7 +590,7 @@ main .recent a{
       position: static;
       display: block;
       width: 100%;
-      margin-bottom: 40px;
+      
       text-align: center;
   }
 }
@@ -655,6 +655,11 @@ main .recent a{
   main .recent table{
       width: 100%;
       margin: 0;
+      overflow: auto;
+  }
+  .tuable{
+      width: 100%;
+      overflow: auto;
   }
 
   .right{
@@ -698,7 +703,11 @@ main .recent a{
   .right .top .button spam{
       font-size: 2rem;
   }
-
+  .popup{
+    align-items: center;
+    text-align: center;
+    display: inline-block;
+}
 
 
 }
@@ -727,7 +736,7 @@ footer p{
 }
 
 button {
-  padding: 10px 24px;
+  padding: 12px 14px;
   border: 2px solid var(--color-primary);
   color: var(--color-primary);
   font-weight: 700;
@@ -832,4 +841,92 @@ select::-ms-expand{
 
 .selected:hover::after{
   color: var(--color-info-dark);
+}
+
+.search-box{
+  display: flex;
+  background-color: var(--color-white);
+  padding: 8px 16px;
+  margin-bottom: 14px;
+  border-radius: var(--border-radius-1);
+  align-items: center;
+}
+
+.search-box .search-icon{
+  font-size: 1.18rem;
+  color: var(--color-primary);
+}
+
+.search-box .search-input {
+  transition: .5s;
+  width: 0;
+  overflow: hidden;
+}
+
+.search-input .input{
+  border: none;
+  outline: none;
+  background-color: unset;
+  padding: 8px;
+  font-weight: 700;
+}
+
+.search-box:hover .search-input,
+.search-out
+{
+  width: 230px;
+  margin-left: 8px;
+}
+
+.containers {
+  display: flex;
+}
+.btn-red {
+  background-color: #FF0000;
+  color: #FFFFFF;
+  padding: 10px 20px;
+  text-decoration: none;
+  border-radius: 5px;
+  border: none;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.btn-red:hover {
+  background-color: #990000;
+}
+
+.popup {
+  display: none;
+  position: fixed;
+  z-index: 1; 
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.4); 
+  justify-content: center;
+  padding: 0 30px 30px;
+}
+
+.popup-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
 }

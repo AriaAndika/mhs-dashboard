@@ -1,3 +1,13 @@
+<script lang=ts>
+  import { getDate } from "$lib/lib";
+  import { jadwal } from "$lib/state";
+	
+	let filteredJadwal = $jadwal.filter(e=>{
+		const [hari] = e.jadwal1.split(',')
+		return getDate().hari == hari
+	})
+
+</script>
 <main>
 	<h1>Presensi Mahasiswa</h1>
 	<div class="recent">
@@ -14,54 +24,19 @@
 							</tr>
 					</thead>
 					<tbody>
-							<tr>
-									<td>1.</td>
-									<td>Dasar Pemrograman</td>
-									<td>H.47</td>
-									<td>A11-4113</td>
-									<td>SELASA</td>
-									<td class="success">15.15-17.15</td>
-							</tr>
-							<tr>
-									<td>2.</td>
-									<td>Dasar Pemrograman</td>
-									<td>H.47</td>
-									<td>A11-4113</td>
-									<td>SELASA</td>
-									<td class="success">15.15-17.15</td>
-							</tr>
-							<tr>
-									<td>3.</td>
-									<td>Dasar Pemrograman</td>
-									<td>H.47</td>
-									<td>A11-4113</td>
-									<td>SELASA</td>
-									<td class="success">15.15-17.15</td>
-							</tr>
-							<tr>
-									<td>4.</td>
-									<td>Dasar Pemrograman</td>
-									<td>H.47</td>
-									<td>A11-4113</td>
-									<td>SELASA</td>
-									<td class="success">15.15-17.15</td>
-							</tr>
-							<tr>
-									<td>5.</td>
-									<td>Dasar Pemrograman</td>
-									<td>H.47</td>
-									<td>A11-4113</td>
-									<td>SELASA</td>
-									<td class="success">15.15-17.15</td>
-							</tr>
-							<tr>
-									<td>6.</td>
-									<td>Dasar Pemrograman</td>
-									<td>H.47</td>
-									<td>A11-4113</td>
-									<td>SELASA</td>
-									<td class="success">15.15-17.15</td>
-							</tr>
+						{#each filteredJadwal as { matkul, jadwal1, ruang }, i}
+						{@const [hari, jam] = jadwal1.split(',')}
+						<tr>
+							<td>{i+1}.</td>
+							<td>{matkul.nama}</td>
+							<td>{ruang}</td>
+							<td>A11-4113</td>
+							<td>{hari}</td>
+							<td class="success">{jam}</td>
+						</tr>
+						{:else}
+							<td colspan="6" style="text-align:center">Hari ini tidak ada absen</td>
+						{/each}
 					</tbody>
 			</table>
 	</div>

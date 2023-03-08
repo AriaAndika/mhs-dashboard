@@ -1,0 +1,152 @@
+<script context=module lang=ts>
+	export let active = writable(location.pathname)
+</script>
+
+<script lang=ts>
+	import { darkMode, footerGetDate } from "$lib/lib";
+  import { logout, state } from "$lib/state";
+  import { writable } from "svelte/store";
+	
+	let dark = darkMode(false,true)
+	let sideMenu: HTMLElement	
+	
+	
+	let nama = $state.user.nama || '<default>'
+	
+	const sidebar = [
+		{
+			href: '/admin',
+			mat: 'grid_view',
+			text: 'Dashboard',
+		},
+		{
+			href: '/admin/dosen',
+			mat: 'person',
+			text: 'Dosen',
+		},
+		{
+			href: '/admin/mhs',
+			mat: 'groups',
+			text: 'Mahasiswa',
+		},
+		{
+			href: '/admin/kelompok',
+			mat: 'add_business',
+			text: 'Tambah Kelompok',
+		},
+		{
+			href: '/admin/prodi',
+			mat: 'school',
+			text: 'Program Studi',
+		},
+		{
+			href: '/admin/jadwal',
+			mat: 'schedule',
+			text: 'Jadwal',
+		}
+	]
+</script>
+<div class="container">
+	<aside bind:this={sideMenu}>
+			<div class="top">
+					<div class="logo">
+							<img src="/img/logo.png" alt="logo">
+							<h2>PRESENSI <span class="primary">UDINUS</span></h2>
+					</div>
+					<!-- svelte-ignore a11y-click-events-have-key-events -->
+					<div class="close" id="close-btn" on:click={() =>sideMenu.style.display = 'none'}>
+							<span class="material-symbols-outlined">close</span>
+					</div>
+			</div>
+			<div class="sidebar">
+				{#each sidebar as { text, href, mat }}
+				<a href="{href}" class:active={$active==href} on:click={()=>$active=href}>
+						<span class="material-symbols-outlined">{mat}</span>
+						<h3>{@html text}</h3>
+				</a>
+				{/each}
+					<a href="#logout" on:click={()=>{logout();active.set('/admin')}}>
+							<span class="material-symbols-outlined">logout</span>
+							<h3>Log Out</h3>
+					</a>
+			</div>
+	</aside>
+	<!-- AKHIRAN ASIDE -->
+	<slot/>
+	<div class="right">
+			<div class="top">
+					<button id="menu-btn" on:click={() =>sideMenu.style.display = 'block'}>
+							 <span class="material-symbols-outlined">menu</span>
+					</button>
+					<!-- svelte-ignore a11y-click-events-have-key-events -->
+					<div class="theme-toggler" on:click={()=>{dark = darkMode(dark)}}>
+							<span class="material-symbols-outlined" class:active={!dark}>light_mode</span>
+							<span class="material-symbols-outlined" class:active={dark}>dark_mode</span>
+					</div>
+					<div class="profile">
+							<div class="info">
+									<p>Halo, <b>{nama}</b></p>
+									<small class="text-muted">{$state.user.keterangan}</small>
+							</div>
+							<div class="profile-photo">
+									<img src="/img/admin.png" alt="">
+							</div>
+					</div>
+			</div>
+			<!-- AKHIRAN TOP -->
+			<div class="recent-updates">
+					<h2>Update Terbaru</h2>
+					<div class="updates">
+							<div class="update">
+									<div class="profile-photo">
+											<img src="/img/admin.png" alt="logo">
+									</div>
+									<div class="message">
+											<p><b>Ricky Primayuda Putra</b> Telah berhasil Presensi dan diterima di jam</p>
+											<small class="text-muted success">15.15</small>
+									</div>
+							</div>
+					</div>
+					<div class="updates">
+							<div class="update">
+									<div class="profile-photo">
+											<img src="/img/admin.png" alt="logo">
+									</div>
+									<div class="message">
+											<p><b>Aria Putra Andika</b> Sedikit Terlambat Presensi dan diterima di jam</p>
+											<small class="text-muted warning">15.20</small>
+									</div>
+							</div>
+					</div>
+					<div class="updates">
+							<div class="update">
+									<div class="profile-photo">
+											<img src="/img/admin.png" alt="logo">
+									</div>
+									<div class="message">
+											<p><b>Ivan Putra Pratama</b> Terlambat Presensi dan tidak dapat diterima di jam</p>
+											<small class="text-muted danger">15.30</small>
+									</div>
+							</div>
+					</div>
+			</div>
+			<!-- AKHIRAN UPDATE TERBARU -->
+			<div class="absensi-analytics">
+					<h2>Analisa Presensi</h2>
+					<div class="item online">
+							<div class="right">
+									<span class="material-symbols-outlined icon">groups</span>
+									<h3>Teknik Informatika</h3>
+									<div class="info">
+											<h5 class="success">95 Mahasiswa</h5>
+											<small class="text-muted">Hari ini</small>
+									</div>
+							</div>
+					</div>
+			</div>
+	</div>
+</div>
+
+<footer>
+	<p id="date">{footerGetDate()}</p>
+</footer>

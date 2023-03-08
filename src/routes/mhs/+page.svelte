@@ -1,163 +1,133 @@
 <script lang=ts>
   import { onMount } from "svelte";
-	// import Cam from "./cam.svelte";
+	import { getDate, getTime } from "$lib/lib";
+  import { jadwal, state } from "$lib/state";
+	import { active } from "./+layout.svelte";
 	
-	let showDevice: (isShowed: boolean) => Promise<void> = () => new Promise(()=>{})
-	let loaded = false
+	
+
+	const def = { min: 0, sec: '0', time: 0, counter: '', isHide: false }
+	let data = [Object.create(def),Object.create(def),def]
+	
+	let filteredJadwal = $jadwal.filter((e,i)=>{
+		const [hari] = e.jadwal1.split(',')
+		return getDate().hari == hari
+	})
 	
 	
-	const startingMinutes = 30;
-	let time = startingMinutes * 60;
-	let counter = ''
+	filteredJadwal.forEach((e,i)=>{
+		
+		const [hari] = e.jadwal1.split(',')
+
+		if (!e.status) { return }
+		
+		const openTime = new Date(e.stamp).getMinutes()
+		const openTimeSec = new Date(e.stamp).getSeconds()
+		
+		
+		const currentTime = (new Date()).getMinutes()
+		const currentTimeSec = (new Date()).getSeconds()
+		const endTime = openTime + 3
+		
+		
+		const counter = endTime - currentTime
+		
+		data[i].time = (counter * 60) + (openTimeSec - currentTimeSec)
+	})
+	
+	// const startingMinutes = 0
+	
 	$: {
-		const minutes = Math.floor(time / 60);
-		const seconds = time % 60 < 10 ? '0' + `${time % 60}` : `${time % 60}`;
-		counter = `${minutes}:${seconds}`;
+		filteredJadwal.forEach((e,i)=>{
+			const min = Math.floor(data[i].time / 60)
+			const sec = data[i].time % 60 < 10 ? '0' + `${data[i].time % 60}` : `${data[i].time % 60}`
+			
+			data[i].counter = `${min}:${sec}`
+		})
 	}
 	
-	onMount(()=>{setInterval(()=>{time--;}, 1000);})
-
-	const date = new Date();
-	let tahun = date.getFullYear();
-	let bulan: number | string = date.getMonth();
-	let tanggal = date.getDate();
-	let hari: number | string = date.getDay();
-	let hariMap = ["Minggu","Senin","Selasa","Rabu","Kamis","Jum'at","Sabtu"]
-	let bulanMap = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"]
-	hari = hariMap[hari]
-	bulan = bulanMap[bulan]
-	let tampilWaktu = "" + hari + ", " + tanggal + " " + bulan + " " + tahun + "";
+	
+	onMount(()=>{setInterval(()=>{
+		data.forEach((_,i) => {
+			data[i].time -= 1
+		})}, 1000)
+	})
+	
+	// Face app
+	let show = false
+	const absenCallback = () => {
+		show = true
+	}
+	
 </script>
 
-<!-- <Cam bind:loaded bind:showDevice/> -->
+{#if show}
+	<div></div>
+	<!-- <Camera/> -->
+{/if}
 
-<!-- AKHIRAN ASIDE -->
 <main>
-		<h1>Presensi Mahasiswa</h1>
-		<div class="date"><input type="date"></div>
-		<h1 class="pt">Presensi Yang akan ditutup</h1>
-		<h1 id="dates">{tampilWaktu}</h1>
+	<h1>Presensi Mahasiswa</h1>
+	<h1 class="pt">Presensi Yang akan ditutup</h1>
+	<h1 id="dates">{getTime()}</h1>
 		
 		
-		<div class="insights">
-			
-			
-				<div class="dosen">
-						<span class="material-symbols-outlined">menu_book</span>
-						<div class="middle">
-								<div class="left">
-										<h3>Kalkulus 1</h3>
-										<h1>Wise Herowati, M.Kom</h1>
-								</div>
-								<div class="progress">
-										<h1 id="countdown" class="countdown">{counter}</h1>
-										<button class="btn-absen" on:click={()=>showDevice(true)}>Absen</button>
-								</div>
-						</div>
-						<small class="text-muted">RUANG H.4.7</small>
-						<small class="text-muted">Pertemuan 1</small>
+	<div class="insights">
+		{#each filteredJadwal as { dosen, matkul, ruang, status, jadwal1 }, i (i)}
+		<div class="dosen">
+			<span class="material-symbols-outlined">menu_book</span>
+			<div class="middle">
+				<div class="left">
+					<h3>{matkul.nama}</h3>
+					<h1>{dosen.nama}</h1>
 				</div>
-				<!-- AKHIRAN DOSEN -->
-				<div class="dosen">
-						<span class="material-symbols-outlined">menu_book</span>
-						<div class="middle">
-								<div class="left">
-										<h3>Matematika Diskrit</h3>
-										<h1>Edy Mulyadi, S.Si, M.Kom</h1>
-								</div>
-								<div class="progress">
-										<h1 id="countdown2" class="countdown">30:00</h1>
-										<button class="btn-absen">Absen</button>
-								</div>
-						</div>
-						<small class="text-muted">RUANG H.4.2</small>
-						<small class="text-muted">Pertemuan 1</small>
+				<div class="progress">
+					
+					{#if status && data[i].time > 0}
+					<h1 id="countdown" class="countdown">{data[i].counter}</h1>
+					<button class="btn-absen" on:click={absenCallback}>Presensi</button>
+					{/if}
+					
 				</div>
-				<!-- AKHIRAN MAHASISWA -->
-				<div class="dosen">
-						<span class="material-symbols-outlined">menu_book</span>
-						<div class="middle">
-								<div class="left">
-										<h3>Pemrograman Berbasis Web</h3>
-										<h1>Ajib Susanto, M.Kom</h1>
-								</div>
-								<div class="progress">
-										<h1 id="countdown2" class="countdown">30:00</h1>
-										<button class="btn-absen">Absen</button>
-								</div>
-						</div>
-						<small class="text-muted">RUANG D.3.12</small>
-						<small class="text-muted">Pertemuan 1</small>
-				</div>
-				<!-- AKHIRAN FAKULTAS -->
+			</div>
+			<small><div class="text-muted">Ruang {ruang}, {jadwal1.split(',')[1]}</div></small>
+			<small class="text-muted">Pertemuan 1</small>
 		</div>
-		<!-- AKHIRAN INSIGHTS -->
+		{/each}
+	</div>
+	<!-- AKHIRAN INSIGHTS -->
 
 		<div class="recent">
 				<h2>Jadwal yang akan datang</h2>
 				<table>
 						<thead>
 								<tr>
-										<th>NO.</th>
-										<th>Mata Kuliah</th>
-										<th>RUANGAN</th>
-										<th>Kelompok</th>
-										<th>HARI</th>
-										<th>JAM</th>
+									<th>No.</th>
+									<th>Mata Kuliah</th>
+									<th>RUANGAN</th>
+									<th>Kelompok</th>
+									<th>HARI</th>
+									<th>JAM</th>
 								</tr>
 						</thead>
 						<tbody>
-								<tr>
-										<td>1.</td>
-										<td>Dasar Pemrograman</td>
-										<td>H.47</td>
-										<td>A11-4113</td>
-										<td>SELASA</td>
-										<td class="success">15.15-17.15</td>
-								</tr>
-								<tr>
-										<td>2.</td>
-										<td>Dasar Pemrograman</td>
-										<td>H.47</td>
-										<td>A11-4113</td>
-										<td>SELASA</td>
-										<td class="success">15.15-17.15</td>
-								</tr>
-								<tr>
-										<td>3.</td>
-										<td>Dasar Pemrograman</td>
-										<td>H.47</td>
-										<td>A11-4113</td>
-										<td>SELASA</td>
-										<td class="success">15.15-17.15</td>
-								</tr>
-								<tr>
-										<td>4.</td>
-										<td>Dasar Pemrograman</td>
-										<td>H.47</td>
-										<td>A11-4113</td>
-										<td>SELASA</td>
-										<td class="success">15.15-17.15</td>
-								</tr>
-								<tr>
-										<td>5.</td>
-										<td>Dasar Pemrograman</td>
-										<td>H.47</td>
-										<td>A11-4113</td>
-										<td>SELASA</td>
-										<td class="success">15.15-17.15</td>
-								</tr>
-								<tr>
-										<td>6.</td>
-										<td>Dasar Pemrograman</td>
-										<td>H.47</td>
-										<td>A11-4113</td>
-										<td>SELASA</td>
-										<td class="success">15.15-17.15</td>
-								</tr>
+							{#each filteredJadwal as { matkul, jadwal1, ruang }, i}
+							{@const [hari, jam] = jadwal1.split(',')}
+							<tr>
+									<td>{i+1}.</td>
+									<td>{matkul.nama}</td>
+									<td>{ruang}</td>
+									<td>{$state.user.kelompok}</td>
+									<td>{hari}</td>
+									<td class="success">{jam}</td>
+							</tr>
+							{:else}
+								<td colspan="6" style="text-align:center">Hari ini tidak ada absen</td>
+							{/each}
 						</tbody>
 				</table>
-				<a href="/mhs/jadwal">Lihat Semua</a>
+				<a style="margin-top: 6rem" href="/mhs/jadwal" on:click={()=>$active="/mhs/jadwal"}>Lihat Semua</a>
+				<!-- <h2>Hari ini tidak ada absen</h2> -->
 		</div>
 </main>
 <!-- Akhiran Main -->

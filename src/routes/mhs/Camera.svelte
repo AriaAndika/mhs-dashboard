@@ -1,17 +1,21 @@
 <script lang=ts>
+  import { detectLocation } from "$lib/lib";
+  import { state } from "$lib/state";
   import * as faceapi from "@vladmandic/face-api"
   import { onDestroy, onMount } from "svelte";
 	
   const models = 'https://raw.githubusercontent.com/justadudewhohacks/face-api.js/master/weights'
 	const size = 128
 	const delay = 100
+  const nama = $state.user.nama
 	
 	export let close
+  export let onSuccessCallback
 	
   let canvas: HTMLCanvasElement
   let video: HTMLVideoElement
   let msg = 'sabar...'
-  let faceMatcher
+  let faceMatcher: faceapi.FaceMatcher
   let ctx: CanvasRenderingContext2D
   
   let stop = false
@@ -32,27 +36,31 @@
     ctx = canvas.getContext('2d')
     
     // IMAGES
-    const img = await fetch('/Aria_Putra_Andika.json', { cache: "force-cache" }).then(e=>e.json())
-    // const labels = Object.entries(img).map(([k,v])=>{
-    //   return new faceapi.LabeledFaceDescriptors(k,[ new Float32Array(Object.values(v)) ])
-    // })
+    
+    const img = await fetch(`/${nama.trim().replaceAll(' ','_')}.json`, { cache: "force-cache" }).then(e=>e.json())
+    console.log('scanning',nama)
     let labels = new faceapi.LabeledFaceDescriptors("Ricky",[ new Float32Array(Object.values(img)) ])
     
     // FACE MATCHER
     // SEMAKIN RENDAH, SEMAKIN KETAT
-    faceMatcher = new faceapi.FaceMatcher(labels,.4)
+    faceMatcher = new faceapi.FaceMatcher(labels,.1)
     
     msg = 'meminta akses kamera...'
     stream = await navigator.mediaDevices.getUserMedia({ video: {width: size, height: size} })
     video.srcObject = stream
     
-    
+    refreshCoor().then(e=>{
+      if (!e){
+        msg = '<div style="color:red">Anda Harus berada di Udinus</div>'
+        stop = true
+      }
+    })
     msg = 'memulai face-detector...'
     video.addEventListener('play',main)
   })
   
   onDestroy(()=>{
-    stream.getTracks()[0].stop()
+    stream?.getTracks?.()[0].stop()
     stop = true
     console.log('STOP')
   })
@@ -68,7 +76,16 @@
     if (detections){
       try {
         const res = faceMatcher.findBestMatch(detections.descriptor)
-        msg = res.toString(true)
+        // msg = res.toString(true)
+        if (res.distance < .46){
+          if (stop) { return }
+          msg = nama.trim() + ', Memproses...'
+          await onSuccessCallback()
+          close()
+          return
+        } else {
+          msg = 'Wajah tidak dikenali'          
+        }
         
         if (stop) { return }
         
@@ -77,11 +94,29 @@
         console.error(error)
       }
     } else {
-      msg = 'Wajah tidak terdeteksi'
+      msg = 'Mendeteksi...'
     }
     
     setTimeout(main,delay);
   }
+  
+  // GEO
+  
+  let isJarakAsli = false
+	async function refreshCoor(): Promise<boolean> {
+    return new Promise((res,rej)=>{
+      navigator.geolocation.getCurrentPosition((e)=>{        
+        let result: boolean
+        if (isJarakAsli){
+          result = detectLocation(e.coords.latitude,e.coords.longitude)
+        } else {
+          result = detectLocation(e.coords.latitude,e.coords.longitude)
+        }
+        res(result)
+      },err=>rej(err))
+    })
+  }
+  
 </script>
 
 <!-- svelte-ignore a11y-media-has-caption -->
@@ -94,7 +129,7 @@
 			<canvas width="{size}" height="{size}" bind:this={canvas}></canvas>
 		</div>
 		<div>
-			<h2 class="text-2xl font-bold">{msg}</h2>
+			<h2 class="text-2xl font-bold">{@html msg}</h2>
 		</div>	
 	</div>
 </div>

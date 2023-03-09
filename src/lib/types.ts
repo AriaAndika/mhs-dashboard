@@ -27,6 +27,14 @@ export interface Jadwal {
 	ruang: string
 	status: boolean
 	stamp: number
+	dadakan: boolean
+}
+export interface Presensi {
+	id: number
+	status: number
+	waktu: string
+	jadwal: Jadwal
+	mhs: User
 }
 export interface AdminInfo {
 	jadwal: Jadwal[]
@@ -37,6 +45,10 @@ export interface AdminInfo {
 		mhs: string
 		prodi: string
 	}[]
+}
+export interface DosenInfo {
+	mhs: User[]
+	presensi: Presensi[]
 }
 export interface State {
 	session: Session | null

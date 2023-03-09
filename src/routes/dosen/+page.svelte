@@ -11,13 +11,11 @@
 	
 	function _bukaPresensi(inputJadwal: Jadwal) {
 		return async () => {
-			const { data, error  } = await bukaPresensi(inputJadwal)
+			const { error } = await bukaPresensi(inputJadwal)
 			if (error) { return console.error("Error Buka Presensi:",error) }
 			jadwal.set(await fetchDosenJadwal($state.user.nama))
 		}
 	}
-	
-	
 </script>
 
 <main>

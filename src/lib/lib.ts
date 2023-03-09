@@ -51,7 +51,12 @@ export function flatten<T>(arr: T[],cb: (arg: T) => string) {
 	})
 	return Object.keys(out)
 }
-
+export function detectLocation(x: number,y: number, jarakCustom?: number) {
+	
+	let JARAK_UDINUS = 0.4
+	
+	return ( Math.pow(x-(-6.981362),2) + Math.pow(y-110.409407,2) ) * 100000 <= (jarakCustom ?? JARAK_UDINUS)
+}
 export function darkMode(current = false,isInit = false) {
 	let dark = current
 	

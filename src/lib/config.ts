@@ -30,5 +30,6 @@ export const defaultJadwal: Jadwal = {
 	kelompok: "<A11-4111>",
 	ruang: "H.9.9",
 	status: false,
-	stamp: Date.now()
+	stamp: Date.now(),
+	dadakan: false
 }

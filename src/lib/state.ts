@@ -2,7 +2,7 @@ import { goto } from "$app/navigation";
 import { createClient } from "@supabase/supabase-js";
 import { writable } from "svelte/store";
 import { defaultJadwal, defaultUser, useAuth, log } from "./config";
-import type { AdminInfo, Jadwal, State, User } from "./types";
+import type { AdminInfo, DosenInfo, Jadwal, Presensi, State, User } from "./types";
 
 export const client = createClient("https://nfqvhulsxmlzekgpayuk.supabase.co",'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5mcXZodWxzeG1semVrZ3BheXVrIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NzU5MDI2MzAsImV4cCI6MTk5MTQ3ODYzMH0.TcYsuIfSXZ31mSVkvJCdbUXOVtzngLVnD6Wo-sHwpws')	
 console.log('state init')
@@ -12,6 +12,8 @@ export const state = writable<State>({
 })
 export let jadwal = writable([defaultJadwal])//: Jadwal[] = [defaultJadwal]
 export let adminInfo = writable<AdminInfo>()
+export let dosenInfo = writable<DosenInfo>()
+export let userPresensi = writable<Presensi[]>()
 
 function presensi() {
 	
@@ -52,11 +54,13 @@ export async function validateData(user: User) {
 	switch (user.type) {
 		case 'mhs':{
 			jadwal.set(await fetchJadwal(user.kelompok))
+			userPresensi.set(await fetchUserPresensi(user))
 			return
 		}
 		case 'dosen':{
 			jadwal.set(await fetchDosenJadwal(user.nama))
-			if ( log ) console.log(jadwal)
+			dosenInfo.set(await fetchDosenInfo())
+			if ( log ) console.log(dosenInfo)
 			return
 		}
 		case 'admin':{
@@ -127,7 +131,6 @@ export async function fetchDosenJadwal (dosen: string): Promise<Jadwal[]> {
 		.eq('dosen',dosen)).data as any
 }
 export async function fetchAdminInfo (): Promise<AdminInfo> {
-	if ( log ) { console.log('fetch admin dosen') }
 	const res = await Promise.all([
 		client.from('mhs').select('*'),
 		client.from('prodi').select('*'),
@@ -138,6 +141,21 @@ export async function fetchAdminInfo (): Promise<AdminInfo> {
 		if (cr) { console.error(cr) }
 		return [i == 0 ? 'mhs' : i == 1 ? 'prodi' : 'jadwal',data]
 	})) as any
+}
+export async function fetchDosenInfo(): Promise<DosenInfo> {
+	const res = await Promise.all([
+		client.from('presensi').select('*, jadwal(*), mhs(*)'),
+		client.from('mhs').select('*').eq('type','mhs'),
+	])
+	
+	if ( log ) console.log(res[0])
+	return Object.fromEntries(res.map(({data, error: cr},i)=>{
+		if (cr) { console.error(cr) }
+		return [i == 0 ? 'presensi' : 'mhs',data]
+	})) as any
+}
+export async function fetchUserPresensi(user: User): Promise<Presensi[]> {
+	return (await client.from('presensi').select('*, jadwal(*)').eq('mhs',user.nama)).data as any
 }
 
 export async function bukaPresensi(jadwal: Jadwal) {

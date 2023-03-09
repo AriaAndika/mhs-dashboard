@@ -1,21 +1,37 @@
 <script lang=ts>
   import { onMount } from "svelte";
-	import { getDate, getTime } from "$lib/lib";
-  import { jadwal, state } from "$lib/state";
+	import { detectLocation, getDate, getTime, hariMap } from "$lib/lib";
+  import { client, userPresensi, jadwal, state } from "$lib/state";
 	import { active } from "./+layout.svelte";
   import Camera from "./Camera.svelte";
 	
+	async function onSuccessCallback() {
+		const dt = new Date()
+		const hour: string = dt.getHours() < 10 ? '0' + dt.getHours() : `${dt.getHours()}`;
+		const minute: string = dt.getMinutes() < 10 ? '0' + dt.getMinutes() : `${dt.getMinutes()}`;
+		
+		let waktu = `${hariMap[dt.getDay()]},${hour}.${minute}`
+		
+		await client.from('presensi')
+		.insert([
+			{ mhs: $state.user.nama, jadwal_id: current_jadwal_id, waktu, status: 1 }
+		])
+	}
 	
-
+	
+	
+	
 	const def = { min: 0, sec: '0', time: 0, counter: '', isHide: false }
 	let data = [Object.create(def),Object.create(def),def]
+	let current_jadwal_id = 0
 	
 	let filteredJadwal = $jadwal.filter((e,i)=>{
 		const [hari] = e.jadwal1.split(',')
 		return getDate().hari == hari
-	})
+	}).sort((e)=>e.dadakan ? -1 : 1)
+	.filter( (_,i) =>i<= 3 )
 	
-	
+	// COUNTER
 	filteredJadwal.forEach((e,i)=>{
 
 		if (!e.status) { return }
@@ -39,7 +55,7 @@
 	// const startingMinutes = 0
 	
 	$: {
-		filteredJadwal.forEach((e,i)=>{
+		filteredJadwal.forEach((_,i)=>{
 			const min = Math.floor(data[i].time / 60)
 			const sec = data[i].time % 60 < 10 ? '0' + `${data[i].time % 60}` : `${data[i].time % 60}`
 			
@@ -56,7 +72,8 @@
 	
 	// Face app
 	let show = false
-	const absenCallback = () => {
+	const absenCallback = (jadwal: number) => () => {
+		current_jadwal_id = jadwal
 		show = true
 	}
 	
@@ -64,7 +81,7 @@
 
 {#if show}
 	<!-- <div></div> -->
-	<Camera close={()=>show=false} />
+	<Camera {onSuccessCallback} close={()=>show=false} />
 {/if}
 
 <main>
@@ -74,7 +91,7 @@
 		
 		
 	<div class="insights">
-		{#each filteredJadwal as { dosen, matkul, ruang, status, jadwal1 }, i (i)}
+		{#each filteredJadwal as { dosen, matkul, ruang, status, jadwal1, id }, i (i)}
 		<div class="dosen">
 			<span class="material-symbols-outlined">menu_book</span>
 			<div class="middle">
@@ -86,7 +103,9 @@
 					
 					{#if status && data[i].time > 0}
 					<h1 id="countdown" class="countdown">{data[i].counter}</h1>
-					<button class="btn-absen" on:click={absenCallback}>Presensi</button>
+					<button class="btn-absen" on:click={absenCallback(id)}>Presensi</button>
+					{:else if $userPresensi.find(e=>e.jadwal.id == id)}
+						<h2>Anda Telah Presensi</h2>
 					{/if}
 					
 				</div>

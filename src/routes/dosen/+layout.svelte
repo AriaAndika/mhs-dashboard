@@ -1,8 +1,8 @@
 
 <script lang=ts>
-  import { darkMode, footerGetDate } from "$lib/lib";
-	import { logout, state } from "$lib/state";
-  
+  import { darkMode, footerGetDate } from "$lib/lib"
+	import { adminInfo, logout, state } from "$lib/state"
+	
 	let dark = darkMode(false,true)
 	let sideMenu: HTMLElement	
 	let active = location.pathname
@@ -22,10 +22,6 @@
 			href: '/dosen/daftar',
 			mat: 'edit_square',
 			text: 'Daftar Presensi'
-		},{
-			href: '/dosen/laporan',
-			mat: 'visibility',
-			text: 'Laporan Presensi'
 		},{
 			href: '/dosen/rekap',
 			mat: 'dataset',
@@ -90,72 +86,7 @@
 			<!-- AKHIRAN TOP -->
 			<div class="recent-updates">
 					<h2>Update Terbaru</h2>
-					<div class="updates">
-							<div class="update">
-									<div class="profile-photo">
-											<span class="material-symbols-outlined">checklist</span>
-									</div>
-									<div class="message">
-											<p><b>Ricky Primayuda Putra</b> Telah berhasil melakukan Presensii</p>
-											<small class="text-muted success">Kelompok A11-4113</small>
-									</div>
-							</div>
-					</div>
-					<div class="updates">
-							<div class="update">
-									<div class="profile-photo">
-											<span class="material-symbols-outlined">collections_bookmark</span>
-									</div>
-									<div class="message">
-											<p><b>Ricky Primayuda Putra</b> Telah mengumpulkan Tugas Program Array</p>
-											<small class="text-muted success">Kelompok A11-4113</small>
-									</div>
-							</div>
-					</div>
-					<div class="updates">
-							<div class="update">
-									<div class="profile-photo">
-											<span class="material-symbols-outlined">checklist</span>
-									</div>
-									<div class="message">
-											<p><b>Aria Putra Andika</b> Telah berhasil melakukan Presensii</p>
-											<small class="text-muted success">Kelompok A11-4113</small>
-									</div>
-							</div>
-					</div>
-					<div class="updates">
-							<div class="update">
-									<div class="profile-photo">
-											<span class="material-symbols-outlined">collections_bookmark</span>
-									</div>
-									<div class="message">
-											<p><b>Aria Putra Andika</b> Telah mengumpulkan Tugas Program Array</p>
-											<small class="text-muted success">Kelompok A11-4113</small>
-									</div>
-							</div>
-					</div>
-					<div class="updates">
-							<div class="update">
-									<div class="profile-photo">
-											<span class="material-symbols-outlined">checklist</span>
-									</div>
-									<div class="message">
-											<p><b>Ivan Putra Pratama</b> Telah berhasil melakukan Presensii</p>
-											<small class="text-muted success">Kelompok A11-4113</small>
-									</div>
-							</div>
-					</div>
-					<div class="updates">
-							<div class="update">
-									<div class="profile-photo">
-											<span class="material-symbols-outlined">collections_bookmark</span>
-									</div>
-									<div class="message">
-											<p><b>Ivan Putra Pratama</b> Telah mengumpulkan Tugas Program Array</p>
-											<small class="text-muted success">Kelompok A11-4113</small>
-									</div>
-							</div>
-					</div>
+					
 			</div>
 			<!-- AKHIRAN UPDATE TERBARU -->
 	</div>

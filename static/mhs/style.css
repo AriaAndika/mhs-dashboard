@@ -708,12 +708,13 @@ main .recent a{
     text-align: center;
     display: inline-block;
 }
-
+  footer {
+    position: fixed;
+  }
 
 }
 
 footer{
-  position: relative;
   bottom: 0;
   left: 0;
   width: 100%;

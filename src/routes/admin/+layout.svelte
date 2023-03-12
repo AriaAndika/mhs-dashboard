@@ -8,6 +8,7 @@
 	import { darkMode, footerGetDate } from "$lib/lib";
   import { logout, state } from "$lib/state";
   import { writable } from "svelte/store";
+	import { moreMhs } from "./+page.svelte";
 	
 	let dark = darkMode(false,true)
 	let sideMenu: HTMLElement	
@@ -126,7 +127,7 @@
 									<span class="material-symbols-outlined icon">groups</span>
 									<h3>Teknik Informatika</h3>
 									<div class="info">
-											<h5 class="success">95 Mahasiswa</h5>
+											<h5 class="success">{$moreMhs} Mahasiswa</h5>
 											<small class="text-muted">Hari ini</small>
 									</div>
 							</div>

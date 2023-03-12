@@ -1,8 +1,14 @@
+<script lang=ts context=module>
+	export let moreMhs = writable(0)
+	
+</script>
+
 
 <script lang=ts>
   import { filterNow, flatten, getTime } from "$lib/lib";
 	import { active } from "./+layout.svelte";
 	import { adminInfo } from "$lib/state";
+  import { writable } from "svelte/store";
 	
 	function lerp(a:number,b:number,t:number) {
 		return a + (b - a) * t
@@ -12,7 +18,7 @@
 	}
 	
 	$: range = lerp(32,266,(100-c)/100)
-	
+	$: $moreMhs = mhsAktif
 	// from 32 full
 	// to 266 none
 	let c = 0

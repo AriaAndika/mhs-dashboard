@@ -1,10 +1,22 @@
+<script lang=ts context=module>
+	
+	
+	export let datas = writable<any>({})
+		
+</script>
+
 <script lang=ts>
 	import Adder from "./Adder.svelte";
   import Scanner from "./Scanner.svelte";
 	import { news } from "../+layout.svelte";
+  import { writable } from "svelte/store";
 	
 	function onSuccess(nama: string, descriptor: Float32Array) {
-		datas[nama] = descriptor
+		datas.update(e=>{
+			e[nama] = descriptor
+			return e
+		})
+		
 		news.update(e=>{
 			if (e.length == 3){
 				e.pop()
@@ -20,7 +32,6 @@
 	
 	let showAdder = false
 	let showScanner = false
-	let datas = {}
 	
 </script>
 
@@ -28,7 +39,7 @@
 	<Adder close={()=>showAdder=false} {onSuccess} />
 {/if}
 {#if showScanner}
-	<Scanner images={datas} close={()=>showScanner=false} />
+	<Scanner close={()=>showScanner=false} />
 {/if}
 
 <main>
@@ -48,12 +59,14 @@
 					</tr>
 			</thead>
 			<tbody>
-				{#each Object.keys(datas).reverse() as nama, i}
+				{#each Object.keys($datas).reverse() as nama, i}
 				<tr>
 					<td>{i+1}</td>
 					<td colspan="9">{nama}</td>
 					<!-- svelte-ignore a11y-click-events-have-key-events -->
-					<td><span class="material-symbols-outlined" style="cursor: pointer;" on:click={()=>{delete datas[nama];datas=datas}}>delete</span></td>
+					<td><span class="material-symbols-outlined" style="cursor: pointer;" on:click={()=>{
+						datas.update(e=>{ delete e[nama];return e})
+					}}>delete</span></td>
 				</tr>
 				{/each}
 			</tbody>

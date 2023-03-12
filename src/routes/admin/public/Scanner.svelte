@@ -1,6 +1,7 @@
 <script lang=ts>
 	import * as faceapi from "@vladmandic/face-api";
   import { onDestroy, onMount } from "svelte";
+	import { datas } from "./+page.svelte";
 	
 	async function main() {
     const detections = video ? await faceapi.detectSingleFace(video, new faceapi.TinyFaceDetectorOptions({ inputSize: size, scoreThreshold }))
@@ -11,7 +12,8 @@
 		if (detections){
 			ctx.clearRect(0,0,size,size);
 			const result = faceMatcher.findBestMatch(detections.descriptor)
-			msg = "Sukses, Halo " + result.label
+			
+			msg = result.label == 'unknown' ? 'Wajah tidak dikenali' : ("Sukses, Halo " + result.label)
 			
 			if (detections) {
 				faceapi.draw.drawDetections(canvas,detections)
@@ -28,7 +30,6 @@
   }
 	
 	export let close
-	export let images: { [key:string]: Float32Array }
 	// export let onSuccess = null
 	
   const models = 'https://raw.githubusercontent.com/justadudewhohacks/face-api.js/master/weights'
@@ -63,7 +64,7 @@
     video.srcObject = stream
 		
 		// LOAD DATA
-		const labels = Object.entries(images).map(([nama,descriptor])=>{
+		const labels = Object.entries($datas).map(([nama,descriptor]: [string,any])=>{
 			return new faceapi.LabeledFaceDescriptors(nama, [descriptor] )
 		})
 		faceMatcher = new faceapi.FaceMatcher(labels,.6)

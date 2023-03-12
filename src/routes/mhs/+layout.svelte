@@ -1,13 +1,14 @@
 <script context=module lang=ts>
 	
 	export let active = writable<string>(location.pathname)
+	export let IMAGES = writable<Blob[]>()
 	
 </script>
 
 <script lang=ts>
-  import { footerGetDate, darkMode } from "$lib/lib"
+  import { footerGetDate, darkMode, hariMap } from "$lib/lib"
 	import { sidebars } from "./data"
-	import { logout, state } from "$lib/state"
+	import { logout, state, userPresensi } from "$lib/state"
   import { writable } from "svelte/store";
 	
 	let dark = darkMode(false,true)
@@ -16,26 +17,10 @@
 	// USER DATA
 	let nama = $state.user.nama || '<default>'
 	
+	let presensiNow = $userPresensi.filter(e=>{
+		return e.waktu.split(',')[0] == hariMap[(new Date()).getDay()]
+	})
 	
-	// function subs() {
-	// 	let os = client.channel('custom-update-channel')
-	// 		.on('postgres_changes',
-	// 			{ event: 'UPDATE', schema: 'public', table: 'jadwal' },
-	// 			(payload) => {
-	// 				console.log('Change received!', payload)
-	// 				const data = payload.new
-	// 				jadwal.update(e=>{
-	// 					e[e.findIndex(f=>f.id==data.id)].status = data.status
-	// 					return e
-	// 				})
-	// 			}
-	// 		)
-	// 		.subscribe();
-		
-	// 	return async () => await os.unsubscribe()
-	// }
-	
-	// onMount(subs)
 	
 </script>
 
@@ -92,7 +77,7 @@
 		<div class="recent-updates">
 			<h2>Update Terbaru</h2>
 			<!-- DATA -->
-			{#each [] as e}
+			{#each presensiNow as e}
 			<div class="updates">
 				<div class="update">
 					<div class="profile-photo">
@@ -100,7 +85,7 @@
 					</div>
 					<div class="message">
 						<p><b>Anda</b> Telah berhasil melakukan abseni</p>
-						<small class="text-muted success">Mata Kuliah {e}</small>
+						<small class="text-muted success">Mata Kuliah {e.jadwal.matkul.nama}</small>
 					</div>
 				</div>
 			</div>

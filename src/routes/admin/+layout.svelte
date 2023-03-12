@@ -1,5 +1,7 @@
 <script context=module lang=ts>
 	export let active = writable(location.pathname)
+	export let news = writable([])
+	
 </script>
 
 <script lang=ts>
@@ -10,6 +12,7 @@
 	let dark = darkMode(false,true)
 	let sideMenu: HTMLElement	
 	
+	$: console.log($news)
 	
 	let nama = $state.user.nama || '<default>'
 	
@@ -43,6 +46,11 @@
 			href: '/admin/jadwal',
 			mat: 'schedule',
 			text: 'Jadwal',
+		},
+		{
+			href: "/admin/public",
+			mat: "add_a_photo",
+			msg: "Public",
 		}
 	]
 </script>
@@ -62,7 +70,7 @@
 				{#each sidebar as { text, href, mat }}
 				<a href="{href}" class:active={$active==href} on:click={()=>$active=href}>
 						<span class="material-symbols-outlined">{mat}</span>
-						<h3>{@html text}</h3>
+						<h3>{@html text ?? 'Public'}</h3>
 				</a>
 				{/each}
 					<a href="#logout" on:click={()=>{logout();active.set('/admin')}}>
@@ -96,39 +104,19 @@
 			<!-- AKHIRAN TOP -->
 			<div class="recent-updates">
 					<h2>Update Terbaru</h2>
+					{#each $news as n}
 					<div class="updates">
 							<div class="update">
 									<div class="profile-photo">
 											<img src="/img/admin.png" alt="logo">
 									</div>
 									<div class="message">
-											<p><b>Ricky Primayuda Putra</b> Telah berhasil Presensi dan diterima di jam</p>
-											<small class="text-muted success">15.15</small>
+											<p><b>{n.nama}</b> Telah mendaftar pada jam</p>
+											<small class="text-muted success">{n.time}</small>
 									</div>
 							</div>
 					</div>
-					<div class="updates">
-							<div class="update">
-									<div class="profile-photo">
-											<img src="/img/admin.png" alt="logo">
-									</div>
-									<div class="message">
-											<p><b>Aria Putra Andika</b> Sedikit Terlambat Presensi dan diterima di jam</p>
-											<small class="text-muted warning">15.20</small>
-									</div>
-							</div>
-					</div>
-					<div class="updates">
-							<div class="update">
-									<div class="profile-photo">
-											<img src="/img/admin.png" alt="logo">
-									</div>
-									<div class="message">
-											<p><b>Ivan Putra Pratama</b> Terlambat Presensi dan tidak dapat diterima di jam</p>
-											<small class="text-muted danger">15.30</small>
-									</div>
-							</div>
-					</div>
+					{/each}
 			</div>
 			<!-- AKHIRAN UPDATE TERBARU -->
 			<div class="absensi-analytics">

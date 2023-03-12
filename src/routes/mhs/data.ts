@@ -16,8 +16,13 @@ export let sidebars = [{
 		mat: "school",
 		msg: "Mata Kuliah",
 	},{
-		href: "/mhs/test",
-		mat: "school",
-		msg: "Test",
-	}
+		href: "/mhs/tambah",
+		mat: "add_a_photo",
+		msg: "Tambahkan",
+	},
+	// {
+	// 	href: "/mhs/test",
+	// 	mat: "school",
+	// 	msg: "Test",
+	// }
 ];

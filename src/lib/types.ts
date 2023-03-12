@@ -28,6 +28,7 @@ export interface Jadwal {
 	status: boolean
 	stamp: number
 	dadakan: boolean
+	len: number
 }
 export interface Presensi {
 	id: number

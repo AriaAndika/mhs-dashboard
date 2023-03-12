@@ -1,9 +1,10 @@
 <script lang=ts>
   import { onMount } from "svelte";
-	import { detectLocation, getDate, getTime, hariMap } from "$lib/lib";
-  import { client, userPresensi, jadwal, state } from "$lib/state";
+	import { getDate, getTime, hariMap } from "$lib/lib";
+  import { client, userPresensi, jadwal, state, validateData } from "$lib/state";
 	import { active } from "./+layout.svelte";
   import Camera from "./Camera.svelte";
+  import type { Jadwal } from "$lib/types";
 	
 	async function onSuccessCallback() {
 		const dt = new Date()
@@ -16,6 +17,9 @@
 		.insert([
 			{ mhs: $state.user.nama, jadwal_id: current_jadwal_id, waktu, status: 1 }
 		])
+		
+		await validateData($state.user)
+		sign()
 	}
 	
 	
@@ -25,13 +29,18 @@
 	let data = [Object.create(def),Object.create(def),def]
 	let current_jadwal_id = 0
 	
-	let filteredJadwal = $jadwal.filter((e,i)=>{
-		const [hari] = e.jadwal1.split(',')
-		return getDate().hari == hari
-	}).sort((e)=>e.dadakan ? -1 : 1)
-	.filter( (_,i) =>i<= 3 )
+	let filteredJadwal: Jadwal[]
 	
+	function sign() {
+		filteredJadwal = $jadwal.filter((e,i)=>{
+			const [hari] = e.jadwal1.split(',')
+			return getDate().hari == hari
+		}).sort((e)=>e.dadakan ? -1 : 1)
+			.filter( (_,i) =>i<= 2 )
+	}
+	sign()
 	// COUNTER
+	console.log(data)
 	filteredJadwal.forEach((e,i)=>{
 
 		if (!e.status) { return }
@@ -44,8 +53,8 @@
 		const currentHour = cr.getHours()
 		const currentTime = cr.getMinutes()
 		const currentTimeSec = cr.getSeconds()
-		const endTime = openTime + 3
-		
+		const endTime = openTime + (e.len ?? 3)
+		console.log('WOOO',openTime,e.len ?? 'wkwk',endTime,currentTime)
 		
 		const counter = endTime - currentTime
 		
@@ -56,10 +65,10 @@
 	
 	$: {
 		filteredJadwal.forEach((_,i)=>{
-			const min = Math.floor(data[i].time / 60)
-			const sec = data[i].time % 60 < 10 ? '0' + `${data[i].time % 60}` : `${data[i].time % 60}`
+			const min = Math.floor(data[i].time / 60);
+			const sec = data[i].time % 60 < 10 ? '0' + `${data[i].time % 60}` : `${data[i].time % 60}`;
 			
-			data[i].counter = `${min}:${sec}`
+			data[i].counter = `${min}:${sec}`;
 		})
 	}
 	

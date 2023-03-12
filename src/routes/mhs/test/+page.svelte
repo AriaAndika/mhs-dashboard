@@ -2,6 +2,19 @@
   import { detectLocation, hariMap } from "$lib/lib";
   import { client, state } from "$lib/state";
   import Camera from "../Camera.svelte";
+  import Photo from "../../Photo.svelte"
+  import { onMount } from "svelte";
+  
+  // function TEST() {
+  //   client.auth.signUp({
+  //     email:'presensionlinemhs1@gmail.com',
+  //     password:"user02"
+  //   }).then(console.log)
+  // }
+  // TEST()
+  
+  // primaricky13@gmail.com : user01
+  // presensionlinemhs1@gmail.com : user02
   
   $: {
     isJarakAsli
@@ -51,23 +64,37 @@
   let jarakCustom = 0
   
   let show = false
+  let useGeo = true
+  let photo = false
   
   let coor = ``
   let coordLabel = ''
   let statusInRange = ''
   
+  // onMount(()=>{
+  //   client.storage.getBucket('bucket').then(e=>console.log('1',e))
+  //   client.storage.from('bucket').download('Ivan_Putra_Pratama.jpg').then(e=>console.log('2',e))//.then(console.log)
+  // })
+  let os
+  $: console.log(os)
+  
   refreshCoor()
 </script>
 {#if show}
-	<Camera onSuccessCallback={onSuccessCallback} close={()=>show=false} />
+	<Camera onSuccessCallback={onSuccessCallback} close={()=>show=false} {useGeo} />
+{/if}
+{#if photo}
+  <Photo close={()=>photo = false} />
 {/if}
 
 <div style="margin-top: 10rem;">
   <h1>Test</h1>
   <button on:click={()=>show=true}>Coba Kamera</button>
+  <button on:click={()=>photo=true}>Photo</button>
   <hr>
   <button on:click={postCoor}>Post Koordinat</button>
   <input type="text" bind:value={coordLabel}>
+  <input type="time" bind:value={os}>
   <hr>
   <button on:click={refreshCoor}>Refresh</button>
   {#if isJarakAsli}

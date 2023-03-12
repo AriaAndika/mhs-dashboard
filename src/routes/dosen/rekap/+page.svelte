@@ -63,7 +63,7 @@
 			<br>
 			<button class="btn-download" on:click={getCsv}><img style="width: 80px; display: flex; justify-content: center;" alt="" src="/img/excel.png"></button>
 			<br><br>
-			<h1>Kelas A11-4113</h1>
+			<h1>Kelas {filter}</h1>
 			<br>
 			<div class="containers">
 			<table>

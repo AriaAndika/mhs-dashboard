@@ -9,6 +9,7 @@
 	const delay = 100
   const nama = $state.user.nama
 	
+  export let useGeo = true
 	export let close
   export let onSuccessCallback
 	
@@ -36,9 +37,16 @@
     ctx = canvas.getContext('2d')
     
     // IMAGES
-    
-    const img = await fetch(`/${nama.trim().replaceAll(' ','_')}.json`, { cache: "force-cache" }).then(e=>e.json())
+    let err = null
+    const img = await fetch(`/${nama.trim().replaceAll(' ','_')}.json`, { cache: "force-cache" }).then(e=>e.json()).catch(e=>err = e)
     console.log('scanning',nama)
+    
+    if (err){
+      msg = `<div style="color:red">Data "${nama}" tidak ditemukan</div>`
+      stop = true
+      return
+    }
+    
     let labels = new faceapi.LabeledFaceDescriptors("Ricky",[ new Float32Array(Object.values(img)) ])
     
     // FACE MATCHER
@@ -49,12 +57,15 @@
     stream = await navigator.mediaDevices.getUserMedia({ video: {width: size, height: size} })
     video.srcObject = stream
     
-    refreshCoor().then(e=>{
-      if (!e){
-        msg = '<div style="color:red">Anda Harus berada di Udinus</div>'
-        stop = true
-      }
-    })
+    if (useGeo){
+      refreshCoor().then(e=>{
+        if (!e){
+          msg = '<div style="color:red">Anda Harus berada di Udinus</div>'
+          stop = true
+        }
+      })
+    }
+    
     msg = 'memulai face-detector...'
     video.addEventListener('play',main)
   })

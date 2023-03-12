@@ -1,7 +1,8 @@
 <script lang=ts>
-	import { client, validateSession } from "$lib/state";
+	import { validateSession } from "$lib/state";
 	import { beforeNavigate,afterNavigate, goto } from "$app/navigation";
-	
+	// import * as faceapi from "@vladmandic/face-api";
+	const models = 'https://raw.githubusercontent.com/justadudewhohacks/face-api.js/master/weights'
 	
 	let show = false
 	beforeNavigate((e)=>{
@@ -10,6 +11,12 @@
 	afterNavigate(()=>{
 		show = false
 	})
+	
+	// Promise.all([
+	// 	faceapi.nets.tinyFaceDetector.loadFromUri(models),
+	// 	faceapi.nets.faceLandmark68TinyNet.loadFromUri(models),
+	// 	faceapi.nets.faceRecognitionNet.loadFromUri(models),
+	// ])
 	
 	async function auth() {
 		const { valid, type, useAuth } = await validateSession()
@@ -35,7 +42,10 @@
 </div>
 
 {#await auth()}
-	<h1>Authenticating...</h1>
+<div style="position: fixed;width: 100vw;height:100vh;display:grid;place-items: center;">
+	<h1>Mengautentikasi...</h1>
+</div>
+
 {:then _}
 <slot/>
 {/await}

@@ -73,7 +73,7 @@
 											<circle style="stroke-dashoffset: {radMhs}%;stroke-dasharray: 255;" cx="38" cy="38" r="36"></circle>
 									</svg>
 									<div class="number">
-											<p>{(mhsAktif/totalMhs)*100}%</p>
+											<p>{Math.ceil((mhsAktif/totalMhs)*100)}%</p>
 									</div>
 							</div>
 					</div>

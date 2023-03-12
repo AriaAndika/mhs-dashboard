@@ -44,7 +44,6 @@
 			</div>
 			
 			<div class="links">
-				<a href="#nim">Lupa Password?</a>
 				<div style="color: brown;">{msg}</div>
 			</div>
 			

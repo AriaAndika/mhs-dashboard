@@ -7,7 +7,8 @@
 	$: filteredJadwal = $jadwal.filter(e=>{
 		const [hari] = e.jadwal1.split(',')
 		return getDate().hari == hari
-	})
+	}).sort((e)=>e.dadakan ? -1 : 1)
+		.filter( (_,i) =>i<= 2 )
 	
 	function _bukaPresensi(inputJadwal: Jadwal) {
 		return async () => {

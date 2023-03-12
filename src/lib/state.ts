@@ -155,7 +155,7 @@ export async function fetchDosenInfo(): Promise<DosenInfo> {
 	})) as any
 }
 export async function fetchUserPresensi(user: User): Promise<Presensi[]> {
-	return (await client.from('presensi').select('*, jadwal(*)').eq('mhs',user.nama)).data as any
+	return (await client.from('presensi').select('*, jadwal(*,matkul(*))').eq('mhs',user.nama)).data as any
 }
 
 export async function bukaPresensi(jadwal: Jadwal) {

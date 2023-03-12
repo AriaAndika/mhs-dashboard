@@ -931,3 +931,26 @@ select::-ms-expand{
   text-decoration: none;
   cursor: pointer;
 }
+
+
+/* .wrapp{
+  top: 0;
+  left: 0;
+  margin:0;
+  padding:0;
+  position: fixed;
+  height: 100vh;
+  max-height: 100vh;
+  width: 100vw;
+  max-width: 100vw;
+  background-color: #0005;
+}
+.za-form{
+  background-color: var(--color-background);
+  width: min-content;
+  height: min-content;
+  min-height: 20vh;
+  min-width: 20vw;
+  padding:2rem;
+  border-radius: 20px;
+} */

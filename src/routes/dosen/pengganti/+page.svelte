@@ -15,7 +15,7 @@
 		const { data: supaData, error } = await client.from('jadwal')
 			.insert([
 				{ kelompok: data.kelompok, jadwal1: `${hariMap[(new Date()).getDay()]},${data.waktu1}-${data.waktu2}`, matkul1: crMatkul.id,
-				dosen: $state.user.nama, ruang: data.ruang, status: true, stamp: Date.now(), dadakan: true
+				dosen: $state.user.nama, ruang: data.ruang, status: true, stamp: Date.now(), dadakan: true, len: data.len
 			}])
 			
 		console.log(supaData,error)
@@ -34,7 +34,7 @@
 	let showPopup;
 	let hidePopup
 	
-	let data = {kelompok:'',waktu1:'',waktu2:'',ruang:''}
+	let data = {kelompok:'',waktu1:'',waktu2:'',ruang:'',len:0}
 	let kelompokFilter = flatten($dosenInfo.mhs,e=>e.kelompok)
 	let load = false
 	let msg = ''
@@ -81,9 +81,13 @@
 			<option>{f}</option>
 			{/each}
 		</select>
+		<label for="">Dari</label>
 		<input type="time" bind:value={data.waktu1} class="za-form">
+		<label for="">Sampai</label>
 		<input type="time" bind:value={data.waktu2} class="za-form">
 		<input type="text" bind:value={data.ruang} placeholder="ruang" class="za-form">
+		<label for="">Dibuka selama</label>
+		<input type="number" bind:value={data.len} class="za-form">
 		<div>
 			<input disabled={load} type="submit" id="" class="za-form" value="Tambahkan">
 			<span style:color={"red"}>{msg}</span>

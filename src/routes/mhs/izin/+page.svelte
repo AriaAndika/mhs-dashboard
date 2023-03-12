@@ -9,7 +9,7 @@
 		filteredJadwal = $jadwal.filter(e=>{
 			const [hari] = e.jadwal1.split(',')
 			return getDate().hari == hari
-		})
+		}).sort((e)=>e.dadakan ? -1 : 1)
 	}
 	
 	
@@ -57,7 +57,9 @@
 
 
 		const counter = endTime - currentTime
-
+		if (!data[i]){
+			data.push(Object.create(def))
+		}
 		data[i].time = (counter * 60) + (openTimeSec - currentTimeSec) + ((openTimeHour * 3600) - (currentHour * 3600))
 	})
 

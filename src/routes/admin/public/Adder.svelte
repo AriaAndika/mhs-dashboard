@@ -29,8 +29,9 @@
 			preparing = false
 		}
 		
-    const detections = video ? await faceapi.detectSingleFace(video, new faceapi.TinyFaceDetectorOptions({ inputSize: size, scoreThreshold }))
-			.withFaceLandmarks(true)
+		// new faceapi.TinyFaceDetectorOptions({ inputSize: size, scoreThreshold })
+    const detections = video ? await faceapi.detectSingleFace(video)
+			.withFaceLandmarks()
 			.withFaceDescriptor() : undefined;
 			
 		if (stop) { return }
@@ -63,7 +64,7 @@
 	// minimum confidence threshold, // default: 0.5
 	const scoreThreshold = .5
 	const countdownLen = 700
-	const delay = 100
+	const delay = 10
 	
 	let preparing = true
 	let prepared = false
@@ -82,9 +83,10 @@
 	
 	onMount(async ()=>{
 		await Promise.all([
-			faceapi.nets.tinyFaceDetector.loadFromUri(models),
-			faceapi.nets.faceLandmark68TinyNet.loadFromUri(models),
+			// faceapi.nets.tinyFaceDetector.loadFromUri(models),
+			faceapi.nets.faceLandmark68Net.loadFromUri(models),
 			faceapi.nets.faceRecognitionNet.loadFromUri(models),
+			faceapi.nets.ssdMobilenetv1.loadFromUri(models),
 		])
 		
 		// descriptor = null

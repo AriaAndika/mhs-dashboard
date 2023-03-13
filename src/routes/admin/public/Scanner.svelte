@@ -4,8 +4,9 @@
 	import { datas } from "./+page.svelte";
 	
 	async function main() {
-    const detections = video ? await faceapi.detectSingleFace(video, new faceapi.TinyFaceDetectorOptions({ inputSize: size, scoreThreshold }))
-			.withFaceLandmarks(true)
+		// new faceapi.TinyFaceDetectorOptions({ inputSize: size, scoreThreshold })
+    const detections = video ? await faceapi.detectSingleFace(video)
+			.withFaceLandmarks()
 			.withFaceDescriptor() : undefined;
 			
 		if (stop) { return }
@@ -36,7 +37,7 @@
 	const size = 416 // 128, 416, 512, 608
 	// minimum confidence threshold, // default: 0.5
 	const scoreThreshold = .5
-	const delay = 100
+	const delay = 10
 	
 	let video
 	let canvas: HTMLCanvasElement
@@ -49,9 +50,10 @@
 	
 	onMount(async ()=>{
 		await Promise.all([
-			faceapi.nets.tinyFaceDetector.loadFromUri(models),
-			faceapi.nets.faceLandmark68TinyNet.loadFromUri(models),
+			// faceapi.nets.tinyFaceDetector.loadFromUri(models),
+			faceapi.nets.faceLandmark68Net.loadFromUri(models),
 			faceapi.nets.faceRecognitionNet.loadFromUri(models),
+			faceapi.nets.ssdMobilenetv1.loadFromUri(models),
 		])
 		
 		if (stop) { return }

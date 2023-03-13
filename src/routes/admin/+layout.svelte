@@ -51,8 +51,13 @@
 		{
 			href: "/admin/public",
 			mat: "add_a_photo",
-			msg: "Public",
-		}
+			text: "Public",
+		},
+		{
+			href: "/admin/kelas",
+			mat: "add_a_photo",
+			text: "Kelas",
+		},
 	]
 </script>
 <div class="container">

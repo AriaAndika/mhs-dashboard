@@ -14,9 +14,9 @@
 		let waktu = `${hariMap[dt.getDay()]},${hour}.${minute}`
 		
 		await client.from('presensi')
-		.insert([
-			{ mhs: $state.user.nama, jadwal_id: current_jadwal_id, waktu, status: 1 }
-		])
+			.insert([
+				{ mhs: $state.user.nama, jadwal_id: current_jadwal_id, waktu, status: 1 }
+			])
 		
 		await validateData($state.user)
 		sign()
@@ -71,7 +71,7 @@
 			data[i].counter = `${min}:${sec}`;
 		})
 	}
-	
+	console.log($userPresensi,filteredJadwal)
 	
 	onMount(()=>{setInterval(()=>{
 		data.forEach((_,i) => {
@@ -110,11 +110,14 @@
 				</div>
 				<div class="progress">
 					
-					{#if status && data[i].time > 0}
+					{#if Boolean($userPresensi.find(e=>e.jadwal_id == id))}
+					<h2>Anda Telah Presensi</h2>
+					{:else if status && data[i].time > 0}
+					{@const e = console.log(Boolean($userPresensi.find(e=>e.jadwal_id == id)))}
 					<h1 id="countdown" class="countdown">{data[i].counter}</h1>
 					<button class="btn-absen" on:click={absenCallback(id)}>Presensi</button>
-					{:else if $userPresensi.find(e=>e.jadwal.id == id)}
-						<h2>Anda Telah Presensi</h2>
+					{:else}
+						<h2>Presensi Di tutup</h2>
 					{/if}
 					
 				</div>

@@ -9,7 +9,7 @@
 	const delay = 100
   const nama = $state.user.nama
 	
-  export let useGeo = true
+  export let useGeo = false
 	export let close
   export let onSuccessCallback
 	
